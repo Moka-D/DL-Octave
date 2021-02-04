@@ -14,8 +14,8 @@ classdef Sigmoid < handle
 
         % ‡“`”d
         function y = forward(obj, x)
-            y = 1 ./ (1 + exp(-x));
-            obj.out = y;
+            obj.out = 1 ./ (1 + exp(-x));
+            y = obj.out;
         end
 
 

@@ -23,7 +23,7 @@ classdef Affine < handle
         % ‡“`”d
         function out = forward(obj, x)
             obj.x = x;
-            out = x * obj.W + obj.b;
+            out = obj.x * obj.W + obj.b;
         end
 
 

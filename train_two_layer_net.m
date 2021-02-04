@@ -1,5 +1,5 @@
-%[x_train, t_train, x_test, t_test] = loadMNISTdata(true, true, true);
-network = TwoLayerNet(784, 50, 10);
+[x_train, t_train, x_test, t_test] = loadMNISTdata(true, true, true);
+network = TwoLayerNet(784, 50, 10, 0.01);
 iters_num = 10000;
 train_size = size(x_train, 1);
 batch_size = 100;
@@ -15,19 +15,24 @@ for iter = 1:iters_num
     batch_mask = randperm(train_size, batch_size);
     x_batch = x_train(batch_mask, :);
     t_batch = t_train(batch_mask, :);
-    
+
+%    W1 = network.params(1).W1;
+%    b1 = network.params(1).b1;
+%    W2 = network.params(1).W2;
+%    b2 = network.params(1).b2;
+
     % Œë·‹t“`”d‚É‚æ‚Á‚ÄŒù”z‚ğ‹‚ß‚é
     grad = network.gradient(x_batch, t_batch);
-    
+
     % XV
-    network.params(1).W1 = network.params(1).W1 - learning_rate .* grad(1).W1;
-    network.params(1).b1 = network.params(1).b1 - learning_rate .* grad(1).b1;
-    network.params(1).W2 = network.params(1).W2 - learning_rate .* grad(1).W2;
-    network.params(1).b2 = network.params(1).b2 - learning_rate .* grad(1).b2;
-    
+    network.params(1).W1 = network.params(1).W1 - (learning_rate .* grad(1).W1);
+    network.params(1).b1 = network.params(1).b1 - (learning_rate .* grad(1).b1);
+    network.params(1).W2 = network.params(1).W2 - (learning_rate .* grad(1).W2);
+    network.params(1).b2 = network.params(1).b2 - (learning_rate .* grad(1).b2);
+
     loss = network.loss(x_batch, t_batch);
     %train_loss_list(1, iter) = loss;
-    
+
     if mod(iter, iter_per_epoch) == 0
         train_acc = network.accuracy(x_train, t_train);
         test_acc  = network.accuracy(x_test, t_test);

@@ -1,6 +1,5 @@
-function out = softmax(a)
+function y = softmax(x)
     %softmax Softmax関数
-    c = max(a);
-    exp_a = exp(a - c); % オーバーフロー対策
-    out = exp_a ./ sum(exp_a);
+    x = x - max(x, [], 2);
+    y = exp(x) ./ sum(x, 2);
 end

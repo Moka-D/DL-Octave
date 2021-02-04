@@ -31,6 +31,10 @@ classdef TwoLayerNet < handle
 
         % „˜_
         function x = predict(obj, x)
+            obj.layers(1).Affine1.W = obj.params(1).W1;
+            obj.layers(1).Affine1.b = obj.params(1).b1;
+            obj.layers(1).Affine2.W = obj.params(1).W2;
+            obj.layers(1).Affine2.b = obj.params(1).b2;
 %            names = fieldnames(obj.layers);
 %            for i = 1:length(names)
 %                layer = getfield(obj.layers(1), names{i});

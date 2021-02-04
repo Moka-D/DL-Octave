@@ -14,7 +14,7 @@ classdef Relu < handle
 
         % ‡“`”d
         function out = forward(obj, x)
-            obj.mask = x <= 0;
+            obj.mask = (x <= 0);
             out = x;
             out(obj.mask) = 0;
         end
@@ -22,8 +22,8 @@ classdef Relu < handle
 
         % ‹t“`”d
         function dx = backward(obj, dout)
+            dout(obj.mask) = 0;
             dx = dout;
-            dx(obj.mask) = 0;
         end
     end
 end
