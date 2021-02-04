@@ -30,7 +30,7 @@ classdef TwoLayerNet < handle
 
 
         % „˜_
-        function x = predict(obj, x)
+        function ret = predict(obj, x)
             obj.layers(1).Affine1.W = obj.params(1).W1;
             obj.layers(1).Affine1.b = obj.params(1).b1;
             obj.layers(1).Affine2.W = obj.params(1).W2;
@@ -40,9 +40,9 @@ classdef TwoLayerNet < handle
 %                layer = getfield(obj.layers(1), names{i});
 %                x = layer.forward(x);
 %            end
-            x = obj.layers(1).Affine1.forward(x);
-            x = obj.layers(1).Relu1.forward(x);
-            x = obj.layers(1).Affine2.forward(x);
+            x_tmp = obj.layers(1).Affine1.forward(x);
+            x_tmp = obj.layers(1).Relu1.forward(x_tmp);
+            ret = obj.layers(1).Affine2.forward(x_tmp);
         end
 
 
