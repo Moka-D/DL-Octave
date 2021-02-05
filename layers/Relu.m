@@ -22,9 +22,8 @@ classdef Relu < handle
 
         % ‹t“`”d
         function dx = backward(obj, dout)
-            dx_tmp = dout;
-            dx_tmp(obj.mask) = 0;
-            dx = dx_tmp;
+            dx = dout;
+            dx(obj.mask) = 0;
         end
     end
 end

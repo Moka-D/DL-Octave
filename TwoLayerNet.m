@@ -30,19 +30,17 @@ classdef TwoLayerNet < handle
 
 
         % „˜_
-        function ret = predict(obj, x)
+        function y = predict(obj, x)
             obj.layers(1).Affine1.W = obj.params(1).W1;
             obj.layers(1).Affine1.b = obj.params(1).b1;
             obj.layers(1).Affine2.W = obj.params(1).W2;
             obj.layers(1).Affine2.b = obj.params(1).b2;
-%            names = fieldnames(obj.layers);
-%            for i = 1:length(names)
-%                layer = getfield(obj.layers(1), names{i});
-%                x = layer.forward(x);
-%            end
-            x_tmp = obj.layers(1).Affine1.forward(x);
-            x_tmp = obj.layers(1).Relu1.forward(x_tmp);
-            ret = obj.layers(1).Affine2.forward(x_tmp);
+            names = fieldnames(obj.layers);
+            for i = 1:length(names)
+                layer = getfield(obj.layers(1), names{i});
+                x = layer.forward(x);
+            end
+            y = x;
         end
 
 
@@ -73,14 +71,11 @@ classdef TwoLayerNet < handle
             % ‹t“`”dŒvŽZ
             dout = 1;
             dout = obj.lastLayer.backward(dout);
-%            names = fieldnames(obj.layers);
-%            for i = length(names):-1:1
-%                layer = getfield(obj.layers(1), names{i});
-%                dout = layer.backward(dout);
-%            end
-            dout = obj.layers(1).Affine2.backward(dout);
-            dout = obj.layers(1).Relu1.backward(dout);
-            dout = obj.layers(1).Affine1.backward(dout);
+            names = fieldnames(obj.layers);
+            for i = length(names):-1:1
+                layer = getfield(obj.layers(1), names{i});
+                dout = layer.backward(dout);
+            end
 
             % Œù”zÝ’è
             grads = struct('W1', {}, 'b1', {}, 'W2', {}, 'b2', {});
