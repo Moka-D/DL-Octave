@@ -79,19 +79,19 @@ function setGlobalVar()
 end
 
 
-function [ret] = getFiles()
+function out = getFiles()
     global files
-    ret = files;
+    out = files;
 end
 
 
-function [ret] = getSaveFile()
+function out = getSaveFile()
     global save_file
-    ret = save_file;
+    out = save_file;
 end
 
 
-function [dataset] = initMNIST()
+function dataset = initMNIST()
     downloadMNIST();
     dataset = convert_mat();
     fprintf('Saving mat file ...\n');
@@ -123,7 +123,7 @@ function downloadFile(file_name)
 end
 
 
-function [dataset] = convert_mat()
+function dataset = convert_mat()
     files = getFiles();
     dataset.train_img   = load_img(char(files(1)));
     dataset.train_label = load_label(char(files(2)));
@@ -132,7 +132,7 @@ function [dataset] = convert_mat()
 end
 
 
-function [data] = load_img(file_name)
+function data = load_img(file_name)
     file_name = char(fullfile(get_script_dir(), file_name));
     img_file = char(gunzip(file_name));
     [file_id, msg] = fopen(img_file, 'r', 'b');
@@ -173,7 +173,7 @@ function [data] = load_img(file_name)
 end
 
 
-function [labels] = load_label(file_name)
+function labels = load_label(file_name)
     file_name = char(fullfile(get_script_dir(), file_name));
     label_file = char(gunzip(file_name));
     [file_id, msg] = fopen(label_file, 'r', 'b');
@@ -202,7 +202,7 @@ function [labels] = load_label(file_name)
 end
 
 
-function [out] = change_one_hot_label(X)
+function out = change_one_hot_label(X)
     out = zeros(size(X, 1), 10);
     for ri = 1:size(X, 1)
         out(ri, X(ri, :) + 1) = 1;
@@ -210,7 +210,7 @@ function [out] = change_one_hot_label(X)
 end
 
 
-function [path] = get_script_dir()
+function path = get_script_dir()
     path = mfilename('fullpath');
     [path, ~, ~] = fileparts(path);
     path = char(path);

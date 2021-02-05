@@ -4,7 +4,8 @@ function loss = cross_entropy_error(y, t)
         t = reshape(t, 1, length(t));
         y = reshape(y, 1, length(y));
     end
-    
+
+    % one-hot-label‚Ìê‡‚Í•ÏŠ·
     if (size(t, 1) == size(y, 1)) && (size(t, 2) == size(y, 2))
         [~, t] = max(t, [], 2);
     end
