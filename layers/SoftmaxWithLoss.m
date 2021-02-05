@@ -30,8 +30,10 @@ classdef SoftmaxWithLoss < handle
             if ~exist('dout', 'var')
                 dout = 1;
             end
+
             batch_size = size(obj.t, 1);
-            if (size(obj.t, 1) == size(obj.y, 1)) ...
+
+            if (size(obj.t, 1) == size(obj.y, 1)) ...   % one-hot-label�̏ꍇ
                 && (size(obj.t, 2) == size(obj.y, 2))
                 dx = (obj.y - obj.t) ./ batch_size;
             else

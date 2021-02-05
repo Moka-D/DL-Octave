@@ -15,7 +15,7 @@ classdef TwoLayerNet < handle
                 weight_init_std = 0.01;
             end
 
-            # d‚Ý‚Ì‰Šú‰»
+            % d‚Ý‚Ì‰Šú‰»
             obj.params(1).W1 = weight_init_std .* randn(input_size, hidden_size);
             obj.params(1).b1 = zeros(1, hidden_size);
             obj.params(1).W2 = weight_init_std .* randn(hidden_size, output_size);
@@ -35,6 +35,7 @@ classdef TwoLayerNet < handle
             obj.layers(1).Affine1.b = obj.params(1).b1;
             obj.layers(1).Affine2.W = obj.params(1).W2;
             obj.layers(1).Affine2.b = obj.params(1).b2;
+
             names = fieldnames(obj.layers);
             for i = 1:length(names)
                 layer = getfield(obj.layers(1), names{i});
