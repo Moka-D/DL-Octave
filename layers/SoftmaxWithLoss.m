@@ -31,7 +31,15 @@ classdef SoftmaxWithLoss < handle
                 dout = 1;
             end
             batch_size = size(obj.t, 1);
-            dx = (obj.y - obj.t) ./ batch_size;
+            if (size(obj.t, 1) == size(obj.y, 1)) ...
+                && (size(obj.t, 2) == size(obj.y, 2))
+                dx = (obj.y - obj.t) ./ batch_size;
+            else
+                dx = obj.y;
+                tmp = zeros(size(dx));
+                tmp(1:batch_size, obj.t) = 1;
+                dx = (dx - tmp) ./ batch_size;
+            end
         end
     end
 end

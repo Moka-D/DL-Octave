@@ -14,7 +14,7 @@ classdef Relu < handle
 
         % ‡“`”d
         function out = forward(obj, x)
-            obj.mask = x <= 0;
+            obj.mask = (x <= 0);
             out = x;
             out(obj.mask) = 0;
         end

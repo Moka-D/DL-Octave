@@ -4,7 +4,12 @@ function loss = cross_entropy_error(y, t)
         t = reshape(t, 1, length(t));
         y = reshape(y, 1, length(y));
     end
+    
+    if (size(t, 1) == size(y, 1)) && (size(t, 2) == size(y, 2))
+        [~, t] = max(t, [], 2);
+    end
 
     batch_size = size(y, 1);
-    loss = -sum(t .* log(y + 1e-7)) ./ batch_size;
+    tmp = log(y(1:batch_size, t) + 1e-7);
+    loss = -sum(tmp(:)) ./ batch_size;
 end
