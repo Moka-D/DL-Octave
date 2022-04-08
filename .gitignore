@@ -1,4 +1,5 @@
 /dataset
+/.vscode
 
 *.fig
 *.mat
