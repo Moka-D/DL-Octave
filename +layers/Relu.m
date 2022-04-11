@@ -8,7 +8,7 @@ classdef Relu < handle
     methods
         function obj = Relu
             % コンストラクタ
-            obj.mask = NaN;
+            obj.mask = [];
         end
 
         function out = forward(obj, x)

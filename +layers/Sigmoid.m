@@ -8,7 +8,7 @@ classdef Sigmoid < handle
     methods
         function obj = Sigmoid()
             % コンストラクタ
-            obj.out = NaN;
+            obj.out = [];
         end
 
         function y = forward(obj, x)

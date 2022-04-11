@@ -14,9 +14,9 @@ classdef Affine < handle
             % コンストラクタ
             obj.W = W;
             obj.b = b;
-            obj.x = NaN;
-            obj.dW = NaN;
-            obj.db = NaN;
+            obj.x = [];
+            obj.dW = [];
+            obj.db = [];
         end
 
         function out = forward(obj, x)

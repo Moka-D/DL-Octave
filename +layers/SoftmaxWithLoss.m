@@ -10,9 +10,9 @@ classdef SoftmaxWithLoss < handle
     methods
         function obj = SoftmaxWithLoss()
             % コンストラクタ
-            obj.loss = NaN;
-            obj.y = NaN;
-            obj.t = NaN;
+            obj.loss = [];
+            obj.y = [];
+            obj.t = [];
         end
 
         function loss = forward(obj, x, t)
