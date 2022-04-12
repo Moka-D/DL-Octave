@@ -1,12 +1,12 @@
 function loss = cross_entropy_error(y, t)
-    %cross_entropy_error 交差エントロピー誤差関数
+    %cross_entropy_error 莠､蟾ｮ繧ｨ繝ｳ繝医Ο繝斐�ｼ隱､蟾ｮ髢｢謨ｰ
 
     if ndims(y) == 1
         t = reshape(t, 1, length(t));
         y = reshape(y, 1, length(y));
     end
 
-    % one-hot-labelの場合は変換
+    % one-hot-label縺ｮ蝣ｴ蜷医�ｯ螟画鋤
     if (size(t, 1) == size(y, 1)) && (size(t, 2) == size(y, 2))
         [~, t] = max(t, [], 2);
     end

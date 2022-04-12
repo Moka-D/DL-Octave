@@ -1,7 +1,7 @@
 function grad = gradient_descent(f, init_x, lr, step_num)
-    %gradient_descent Œù”z~‰º–@
+    %gradient_descent å‹¾é…é™ä¸‹æ³•
 
-    % ƒfƒtƒHƒ‹ƒgˆø”İ’è
+    % ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå¼•æ•°è¨­å®š
     if ~exist('lr', 'var')
         lr = 0.01;
     end

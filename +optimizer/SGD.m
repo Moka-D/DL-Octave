@@ -1,12 +1,12 @@
 classdef SGD < handle
-    %SGD Šm—¦“IŒù”z~‰º–@
+    %SGD ç¢ºçŽ‡çš„å‹¾é…é™ä¸‹æ³•
     properties
-        lr  % ŠwK—¦
+        lr  % å­¦ç¿’çŽ‡
     end
 
     methods
         function obj = SGD(lr)
-            % ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+            % ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 
             if ~exist('lr', 'var')
                 lr = 0.01;
@@ -15,7 +15,7 @@ classdef SGD < handle
         end
 
         function params = update(obj, params, grads)
-            % ƒpƒ‰ƒ[ƒ^‚ÌXV
+            % ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ›´æ–°
 
             fields = fieldnames(params);
             for i_field = 1:length(fields)
@@ -27,4 +27,3 @@ classdef SGD < handle
         end
     end
 end
-

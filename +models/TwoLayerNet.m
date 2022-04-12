@@ -1,29 +1,29 @@
 classdef TwoLayerNet < handle
-    %TwoLayerNet 2‘wƒjƒ…[ƒ‰ƒ‹ƒlƒbƒgƒ[ƒNƒNƒ‰ƒX
+    %TwoLayerNet 2å±¤ãƒ‹ãƒ¥ãƒ¼ãƒ©ãƒ«ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¯ãƒ©ã‚¹
 
     properties
-        params      % Še‘w‚Ìƒpƒ‰ƒ[ƒ^
-        layers      % ŠeƒŒƒCƒ„
-        last_layer  % ÅI‘w‚ÌŠÖ”ƒnƒ“ƒhƒ‹
+        params      % å„å±¤ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+        layers      % å„ãƒ¬ã‚¤ãƒ¤
+        last_layer  % æœ€çµ‚å±¤ã®é–¢æ•°ãƒãƒ³ãƒ‰ãƒ«
     end
 
     methods
         function obj = TwoLayerNet(input_size, hidden_size, output_size, weight_init_std)
-            % ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+            % ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 
-            % ƒfƒtƒHƒ‹ƒgˆø”Ý’è
+            % ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå¼•æ•°è¨­å®š
             if ~exist('weight_init_std', 'var')
                 weight_init_std = 0.01;
             end
 
-            % d‚Ý‚Ì‰Šú‰»
+            % é‡ã¿ã®åˆæœŸåŒ–
             obj.params = struct();
             obj.params.W1 = weight_init_std .* randn(input_size, hidden_size);
             obj.params.b1 = zeros(1, hidden_size);
             obj.params.W2 = weight_init_std .* randn(hidden_size, output_size);
             obj.params.b2 = zeros(1, output_size);
 
-            % ƒŒƒCƒ„‚Ì¶¬
+            % ãƒ¬ã‚¤ãƒ¤ã®ç”Ÿæˆ
             obj.layers = struct();
             obj.layers.Affine1 = layers.Affine(obj.params.W1, obj.params.b1);
             obj.layers.Relu1 = layers.Relu();
@@ -32,7 +32,7 @@ classdef TwoLayerNet < handle
         end
 
         function y = predict(obj, x)
-            % „˜_
+            % æŽ¨è«–
 
             obj.layers.Affine1.W = obj.params.W1;
             obj.layers.Affine1.b = obj.params.b1;
@@ -48,13 +48,13 @@ classdef TwoLayerNet < handle
         end
 
         function ret = loss(obj, x, t)
-            % ‘¹Ž¸
+            % æå¤±
             y = obj.predict(x);
             ret = obj.last_layer.forward(y, t);
         end
 
         function ret = accuracy(obj, x, t)
-            % ³‰ð—¦
+            % æ­£è§£çŽ‡
 
             y = obj.predict(x);
             [~, y] = max(y, [], 2);
@@ -66,12 +66,12 @@ classdef TwoLayerNet < handle
         end
 
         function grads = gradient(obj, x, t)
-            % Œù”zŒvŽZ
+            % å‹¾é…è¨ˆç®—
 
-            % ‡“`”dŒvŽZ
+            % é †ä¼æ’­è¨ˆç®—
             obj.loss(x, t);
 
-            % ‹t“`”dŒvŽZ
+            % é€†ä¼æ’­è¨ˆç®—
             dout = 1;
             dout = obj.last_layer.backward(dout);
             layer_names = fieldnames(obj.layers);
@@ -80,7 +80,7 @@ classdef TwoLayerNet < handle
                 dout = layer.backward(dout);
             end
 
-            % Œù”zÝ’è
+            % å‹¾é…è¨­å®š
             grads = struct();
             grads.W1 = obj.layers.Affine1.dW;
             grads.b1 = obj.layers.Affine1.db;
@@ -89,4 +89,3 @@ classdef TwoLayerNet < handle
         end
     end
 end
-

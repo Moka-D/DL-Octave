@@ -13,4 +13,3 @@ expected.a = params.a - grads.a .* lr;
 expected.b = params.b - grads.b .* lr;
 
 assert((actual.a == expected.a) && (actual.b == expected.b));
-

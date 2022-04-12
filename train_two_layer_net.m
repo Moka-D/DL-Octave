@@ -1,4 +1,4 @@
-%% “ñ‘wƒjƒ…[ƒ‰ƒ‹ƒlƒbƒgƒ[ƒN‚ÌŠwK
+%% äºŒå±¤ãƒ‹ãƒ¥ãƒ¼ãƒ©ãƒ«ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã®å­¦ç¿’
 
 clear all;
 [x_train, t_train, x_test, t_test] = util.load_mnist_data(true, true, true);
@@ -20,10 +20,10 @@ for iter = 1:iters_num
     x_batch = x_train(batch_mask, :);
     t_batch = t_train(batch_mask, :);
 
-    % Œë·‹t“`”d‚É‚æ‚Á‚ÄŒù”z‚ğ‹‚ß‚é
+    % èª¤å·®é€†ä¼æ’­ã«ã‚ˆã£ã¦å‹¾é…ã‚’æ±‚ã‚ã‚‹
     grads = net.gradient(x_batch, t_batch);
 
-    % XV
+    % æ›´æ–°
     net.params = optim.update(net.params, grads);
 
     loss = net.loss(x_batch, t_batch);
@@ -40,4 +40,3 @@ end
 
 plot(1:acc_list_size, train_acc_list, 1:acc_list_size, test_acc_list);
 legend('Train Accuracy', 'Test Accuracy', 'Location', 'southeast');
-

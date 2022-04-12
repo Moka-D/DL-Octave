@@ -1,5 +1,5 @@
 function dydx = numerical_diff(f, x)
-    %numerical_diff ”’l”÷•ªŠÖ”
+    %numerical_diff æ•°å€¤å¾®åˆ†é–¢æ•°
     h = 1e-4;   % 0.0001
     dydx = (f(x+h) - f(x-h)) ./ (2 .* h);
 end

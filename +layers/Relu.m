@@ -1,25 +1,25 @@
 classdef Relu < handle
-    %Relu ReluƒŒƒCƒ„ƒNƒ‰ƒX
+    %Relu Reluãƒ¬ã‚¤ãƒ¤ã‚¯ãƒ©ã‚¹
 
     properties
-        mask    % logical”z—ñ
+        mask    % logicalé…åˆ—
     end
 
     methods
         function obj = Relu
-            % ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+            % ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
             obj.mask = [];
         end
 
         function out = forward(obj, x)
-            % ‡“`”d
+            % é †ä¼æ’­
             obj.mask = (x <= 0);
             out = x;
             out(obj.mask) = 0;
         end
 
         function dx = backward(obj, dout)
-            % ‹t“`”d
+            % é€†ä¼æ’­
             dx = dout;
             dx(obj.mask) = 0;
         end

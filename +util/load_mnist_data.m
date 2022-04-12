@@ -1,27 +1,27 @@
 function [x_train, t_train, x_test, t_test] = load_mnist_data(normalize, flatten, one_hot_label)
-    %load_mnist_data MNISTƒf[ƒ^‚Ìƒ[ƒhŠÖ”
+    %load_mnist_data MNISTãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒ¼ãƒ‰é–¢æ•°
     %
     % Parameters
     % ----------
     % normalize : logical
-    %   ‰æ‘œ‚ÌƒsƒNƒZƒ‹’l‚ğ0.0`0.1‚É³‹K‰»‚·‚é
+    %   ç”»åƒã®ãƒ”ã‚¯ã‚»ãƒ«å€¤ã‚’0.0ï½0.1ã«æ­£è¦åŒ–ã™ã‚‹
     % flatten : logical
-    %   ‰æ‘œ‚ğ1ŸŒ³”z—ñ‚É•½‚ç‚É‚·‚é‚©‚Ç‚¤‚©
+    %   ç”»åƒã‚’1æ¬¡å…ƒé…åˆ—ã«å¹³ã‚‰ã«ã™ã‚‹ã‹ã©ã†ã‹
     % one_hot_label : logical
-    %   true‚È‚çAƒ‰ƒxƒ‹‚Ílogical”z—ñ‚Æ‚µ‚Ä•Ô‚·
+    %   trueãªã‚‰ã€ãƒ©ãƒ™ãƒ«ã¯logicalé…åˆ—ã¨ã—ã¦è¿”ã™
     %
     % Returns
     % -------
     % x_train : vector/matrix(numeric)
-    %   ŠwKƒf[ƒ^‰æ‘œ
+    %   å­¦ç¿’ãƒ‡ãƒ¼ã‚¿ç”»åƒ
     % t_train : matrix(numeric/logical)
-    %   ŠwKƒf[ƒ^ƒ‰ƒxƒ‹
+    %   å­¦ç¿’ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«
     % x_test : vector/matrix(numeric)
-    %   „˜_ƒf[ƒ^‰æ‘œ
+    %   æ¨è«–ãƒ‡ãƒ¼ã‚¿ç”»åƒ
     % t_test : matrix(numeric/logical)
-    %   „˜_ƒf[ƒ^ƒ‰ƒxƒ‹
+    %   æ¨è«–ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«
 
-    % ƒfƒtƒHƒ‹ƒgˆø”İ’è
+    % ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå¼•æ•°è¨­å®š
     if ~exist('normalize', 'var')
         normalize = true;
     end

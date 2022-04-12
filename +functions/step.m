@@ -1,4 +1,4 @@
 function y = step(x)
-    %step ステップ関数
+    %step 繧ｹ繝�繝�繝鈴未謨ｰ
     y = x > 0;
 end
