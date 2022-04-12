@@ -6,8 +6,7 @@ net = models.TwoLayerNet(784, 50, 10);
 iters_num = 10000;
 train_size = size(x_train, 1);
 batch_size = 100;
-learning_rate = 0.1;
-optim = optimizer.SGD(learning_rate);
+optim = optimizer.SGD();
 iter_per_epoch = max(iters_num / batch_size, 1);
 
 train_loss_list = zeros(1, iters_num);
