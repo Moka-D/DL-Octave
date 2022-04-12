@@ -1,8 +1,8 @@
 %% 二層ニューラルネットワークの学習
 
 clear all;
-[x_train, t_train, x_test, t_test] = util.loadMNISTdata(true, true, true);
-net = multi_layer_net.TwoLayerNet(784, 50, 10);
+[x_train, t_train, x_test, t_test] = util.load_mnist_data(true, true, true);
+net = models.TwoLayerNet(784, 50, 10);
 iters_num = 10000;
 train_size = size(x_train, 1);
 batch_size = 100;

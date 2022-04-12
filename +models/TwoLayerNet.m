@@ -4,7 +4,7 @@ classdef TwoLayerNet < handle
     properties
         params      % Še‘w‚Ìƒpƒ‰ƒ[ƒ^
         layers      % ŠeƒŒƒCƒ„
-        lastLayer   % ÅI‘w‚ÌŠÖ”ƒnƒ“ƒhƒ‹
+        last_layer  % ÅI‘w‚ÌŠÖ”ƒnƒ“ƒhƒ‹
     end
 
     methods
@@ -28,7 +28,7 @@ classdef TwoLayerNet < handle
             obj.layers.Affine1 = layers.Affine(obj.params.W1, obj.params.b1);
             obj.layers.Relu1 = layers.Relu();
             obj.layers.Affine2 = layers.Affine(obj.params.W2, obj.params.b2);
-            obj.lastLayer = layers.SoftmaxWithLoss();
+            obj.last_layer = layers.SoftmaxWithLoss();
         end
 
         function y = predict(obj, x)
@@ -39,9 +39,9 @@ classdef TwoLayerNet < handle
             obj.layers.Affine2.W = obj.params.W2;
             obj.layers.Affine2.b = obj.params.b2;
 
-            layerNames = fieldnames(obj.layers);
-            for iLayer = 1:length(layerNames)
-                layer = getfield(obj.layers, layerNames{iLayer});
+            layer_names = fieldnames(obj.layers);
+            for i_layer = 1:length(layer_names)
+                layer = getfield(obj.layers, layer_names{i_layer});
                 x = layer.forward(x);
             end
             y = x;
@@ -50,7 +50,7 @@ classdef TwoLayerNet < handle
         function ret = loss(obj, x, t)
             % ‘¹Ž¸
             y = obj.predict(x);
-            ret = obj.lastLayer.forward(y, t);
+            ret = obj.last_layer.forward(y, t);
         end
 
         function ret = accuracy(obj, x, t)
@@ -73,10 +73,10 @@ classdef TwoLayerNet < handle
 
             % ‹t“`”dŒvŽZ
             dout = 1;
-            dout = obj.lastLayer.backward(dout);
-            names = fieldnames(obj.layers);
-            for i = length(names):-1:1
-                layer = getfield(obj.layers, names{i});
+            dout = obj.last_layer.backward(dout);
+            layer_names = fieldnames(obj.layers);
+            for i_layer = length(layer_names):-1:1
+                layer = getfield(obj.layers, layer_names{i_layer});
                 dout = layer.backward(dout);
             end
 
@@ -89,3 +89,4 @@ classdef TwoLayerNet < handle
         end
     end
 end
+

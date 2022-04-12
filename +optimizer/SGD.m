@@ -18,11 +18,11 @@ classdef SGD < handle
             % パラメータの更新
 
             fields = fieldnames(params);
-            for iField = 1:length(fields)
-                param = getfield(params, fields{iField});
-                grad = getfield(grads, fields{iField});
+            for i_field = 1:length(fields)
+                param = getfield(params, fields{i_field});
+                grad = getfield(grads, fields{i_field});
                 param = param - obj.lr .* grad;
-                params = setfield(params, fields{iField}, param);
+                params = setfield(params, fields{i_field}, param);
             end
         end
     end
