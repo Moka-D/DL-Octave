@@ -1,22 +1,22 @@
 classdef SoftmaxWithLoss < handle
-    %SoftmaxWithLoss Softmax-with-LossƒŒƒCƒ„ƒNƒ‰ƒX
+    %SoftmaxWithLoss Softmax-with-Lossãƒ¬ã‚¤ãƒ¤ã‚¯ãƒ©ã‚¹
 
     properties
-        loss    % ‘¹Ž¸
-        y       % softmax‚Ìo—Í
-        t       % ‹³Žtƒf[ƒ^ (one-hot vector)
+        loss    % æå¤±
+        y       % softmaxã®å‡ºåŠ›
+        t       % æ•™å¸«ãƒ‡ãƒ¼ã‚¿ (one-hot vector)
     end
 
     methods
         function obj = SoftmaxWithLoss()
-            % ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-            obj.loss = NaN;
-            obj.y = NaN;
-            obj.t = NaN;
+            % ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+            obj.loss = [];
+            obj.y = [];
+            obj.t = [];
         end
 
         function loss = forward(obj, x, t)
-            % ‡“`”d
+            % é †ä¼æ’­
             obj.t = t;
             obj.y = functions.softmax(x);
             obj.loss = functions.cross_entropy_error(obj.y, obj.t);
@@ -24,14 +24,14 @@ classdef SoftmaxWithLoss < handle
         end
 
         function dx = backward(obj, dout)
-            % ‹t“`”d
+            % é€†ä¼æ’­
             if ~exist('dout', 'var')
                 dout = 1;
             end
 
             batch_size = size(obj.t, 1);
 
-            if (size(obj.t, 1) == size(obj.y, 1)) ...   % one-hot-label‚Ìê‡
+            if (size(obj.t, 1) == size(obj.y, 1)) ...   % one-hot-labelã®å ´åˆ
                 && (size(obj.t, 2) == size(obj.y, 2))
                 dx = (obj.y - obj.t) ./ batch_size;
             else

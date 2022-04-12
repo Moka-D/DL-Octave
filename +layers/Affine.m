@@ -1,32 +1,32 @@
 classdef Affine < handle
-    %Affine AffineƒŒƒCƒ„ƒNƒ‰ƒX
+    %Affine Affineãƒ¬ã‚¤ãƒ¤ã‚¯ãƒ©ã‚¹
 
     properties
-        W   % d‚Ý
-        b   % ƒoƒCƒAƒX
-        x   % “ü—Í
-        dW  % d‚Ý‚Ì”÷•ª
-        db  % ƒoƒCƒAƒX‚Ì”÷•ª
+        W   % é‡ã¿
+        b   % ãƒã‚¤ã‚¢ã‚¹
+        x   % å…¥åŠ›
+        dW  % é‡ã¿ã®å¾®åˆ†
+        db  % ãƒã‚¤ã‚¢ã‚¹ã®å¾®åˆ†
     end
 
     methods
         function obj = Affine(W, b)
-            % ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+            % ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
             obj.W = W;
             obj.b = b;
-            obj.x = NaN;
-            obj.dW = NaN;
-            obj.db = NaN;
+            obj.x = [];
+            obj.dW = [];
+            obj.db = [];
         end
 
         function out = forward(obj, x)
-            % ‡“`”d
+            % é †ä¼æ’­
             obj.x = x;
             out = obj.x * obj.W + obj.b;
         end
 
         function dx = backward(obj, dout)
-            % ‹t“`”d
+            % é€†ä¼æ’­
             dx = dout * obj.W.';
             obj.dW = obj.x.' * dout;
             obj.db = sum(dout, 1);

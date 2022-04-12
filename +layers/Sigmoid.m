@@ -1,24 +1,24 @@
 classdef Sigmoid < handle
-    %Sigmoid SigmoidƒŒƒCƒ„ƒNƒ‰ƒX
+    %Sigmoid Sigmoidãƒ¬ã‚¤ãƒ¤ã‚¯ãƒ©ã‚¹
 
     properties
-        out % o—Í
+        out % å‡ºåŠ›
     end
 
     methods
         function obj = Sigmoid()
-            % ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-            obj.out = NaN;
+            % ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+            obj.out = [];
         end
 
         function y = forward(obj, x)
-            % ‡“`”d
+            % é †ä¼æ’­
             obj.out = 1 ./ (1 + exp(-x));
             y = obj.out;
         end
 
         function dx = backward(obj, dy)
-            % ‹t“`”d
+            % é€†ä¼æ’­
             dx = dout .* (1.0 - obj.out) .* obj.out;
         end
     end

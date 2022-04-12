@@ -1,5 +1,5 @@
 function y = relu(x)
-    %relu ReLUä÷êî
+    %relu ReLUÈñ¢Êï∞
     mask = x < 0;
     y = x;
     y(mask) = 0;

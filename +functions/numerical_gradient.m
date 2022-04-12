@@ -1,16 +1,16 @@
 function grad = numerical_gradient(f, x)
-    %numerical_gradient ”’lŒù”zŒvZŠÖ”
+    %numerical_gradient æ•°å€¤å‹¾é…è¨ˆç®—é–¢æ•°
 
     h = 1e-4;   % 0.0001
-    grad = zeros(size(x));  % x‚Æ“¯‚¶Œ`ó‚Ì0s—ñ‚ğì¬
+    grad = zeros(size(x));  % xã¨åŒã˜å½¢çŠ¶ã®0è¡Œåˆ—ã‚’ä½œæˆ
 
     for idx = 1:numel(x)
         tmp = x(idx);
-        % f(x+h)‚ÌŒvZ
+        % f(x+h)ã®è¨ˆç®—
         x(idx) = tmp + h;
         fxh1 = f(x);
 
-        % f(x-h)‚ÌŒvZ
+        % f(x-h)ã®è¨ˆç®—
         x(idx) = tmp - h;
         fxh2 = f(x);
 

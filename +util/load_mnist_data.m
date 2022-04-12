@@ -1,27 +1,27 @@
-function [x_train, t_train, x_test, t_test] = loadMNISTdata(normalize, flatten, one_hot_label)
-    %loadMNISTdata MNISTƒf[ƒ^‚Ìƒ[ƒhŠÖ”
+function [x_train, t_train, x_test, t_test] = load_mnist_data(normalize, flatten, one_hot_label)
+    %load_mnist_data MNISTãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒ¼ãƒ‰é–¢æ•°
     %
     % Parameters
     % ----------
     % normalize : logical
-    %   ‰æ‘œ‚ÌƒsƒNƒZƒ‹’l‚ğ0.0`0.1‚É³‹K‰»‚·‚é
+    %   ç”»åƒã®ãƒ”ã‚¯ã‚»ãƒ«å€¤ã‚’0.0ï½0.1ã«æ­£è¦åŒ–ã™ã‚‹
     % flatten : logical
-    %   ‰æ‘œ‚ğ1ŸŒ³”z—ñ‚É•½‚ç‚É‚·‚é‚©‚Ç‚¤‚©
+    %   ç”»åƒã‚’1æ¬¡å…ƒé…åˆ—ã«å¹³ã‚‰ã«ã™ã‚‹ã‹ã©ã†ã‹
     % one_hot_label : logical
-    %   true‚È‚çAƒ‰ƒxƒ‹‚Ílogical”z—ñ‚Æ‚µ‚Ä•Ô‚·
+    %   trueãªã‚‰ã€ãƒ©ãƒ™ãƒ«ã¯logicalé…åˆ—ã¨ã—ã¦è¿”ã™
     %
     % Returns
     % -------
     % x_train : vector/matrix(numeric)
-    %   ŠwKƒf[ƒ^‰æ‘œ
+    %   å­¦ç¿’ãƒ‡ãƒ¼ã‚¿ç”»åƒ
     % t_train : matrix(numeric/logical)
-    %   ŠwKƒf[ƒ^ƒ‰ƒxƒ‹
+    %   å­¦ç¿’ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«
     % x_test : vector/matrix(numeric)
-    %   „˜_ƒf[ƒ^‰æ‘œ
+    %   æ¨è«–ãƒ‡ãƒ¼ã‚¿ç”»åƒ
     % t_test : matrix(numeric/logical)
-    %   „˜_ƒf[ƒ^ƒ‰ƒxƒ‹
+    %   æ¨è«–ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«
 
-    % ƒfƒtƒHƒ‹ƒgˆø”İ’è
+    % ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå¼•æ•°è¨­å®š
     if ~exist('normalize', 'var')
         normalize = true;
     end
@@ -32,11 +32,11 @@ function [x_train, t_train, x_test, t_test] = loadMNISTdata(normalize, flatten, 
         one_hot_label = false;
     end
 
-    setGlobalVar();
-    save_file = getSaveFile();
+    set_global_var();
+    save_file = get_save_file();
 
     if ~exist(save_file, 'file')
-        dataset = initMNIST();
+        dataset = initialize_mnist();
     else
         fprintf('Loading mat file ...\n');
         dataset = load(save_file);
@@ -65,7 +65,7 @@ function [x_train, t_train, x_test, t_test] = loadMNISTdata(normalize, flatten, 
 end
 
 
-function setGlobalVar()
+function set_global_var()
     global files
     files = { ...
         'train-images-idx3-ubyte.gz'; ...
@@ -79,37 +79,37 @@ function setGlobalVar()
 end
 
 
-function out = getFiles()
+function out = get_files()
     global files
     out = files;
 end
 
 
-function out = getSaveFile()
+function out = get_save_file()
     global save_file
     out = save_file;
 end
 
 
-function dataset = initMNIST()
-    downloadMNIST();
+function dataset = initialize_mnist()
+    download_mnist();
     dataset = convert_mat();
     fprintf('Saving mat file ...\n');
-    save_file = getSaveFile();
+    save_file = get_save_file();
     save(save_file, '-struct', 'dataset');
     fprintf('Done.\n');
 end
 
 
-function downloadMNIST()
-    files = getFiles();
-    for ii = 1:length(files)
-        downloadFile(char(files(ii)));
+function download_mnist()
+    files = get_files();
+    for i_file = 1:length(files)
+        download_file(char(files(i_file)));
     end
 end
 
 
-function downloadFile(file_name)
+function download_file(file_name)
     url_base = 'http://yann.lecun.com/exdb/mnist/';
     file_path = char(fullfile(get_script_dir(), file_name));
 
@@ -124,7 +124,7 @@ end
 
 
 function dataset = convert_mat()
-    files = getFiles();
+    files = get_files();
     dataset.train_img   = load_img(char(files(1)));
     dataset.train_label = load_label(char(files(2)));
     dataset.test_img    = load_img(char(files(3)));
