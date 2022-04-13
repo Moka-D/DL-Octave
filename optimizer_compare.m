@@ -41,7 +41,6 @@ for iter = 1:max_iterations
 
         loss_list(1, iter) = net.loss(x_batch, t_batch);
         train_loss = setfield(train_loss, key, loss_list);
-        networks = setfield(networks, key, net);
     end
 
     if mod(iter, 100) == 0

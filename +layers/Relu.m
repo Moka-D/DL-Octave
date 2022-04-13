@@ -6,7 +6,7 @@ classdef Relu < handle
     end
 
     methods
-        function obj = Relu
+        function obj = Relu()
             % コンストラクタ
             obj.mask = [];
         end
