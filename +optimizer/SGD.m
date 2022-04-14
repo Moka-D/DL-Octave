@@ -17,15 +17,10 @@ classdef SGD < handle
 
         function params = update(obj, params, grads)
             % パラメータの更新
-
-            fields = fieldnames(params);
-            for i_field = 1:length(fields)
-                field_name = fields{i_field};
-                param = getfield(params, field_name);
-                grad = getfield(grads, field_name);
-
-                param = param - obj.lr .* grad;
-                params = setfield(params, field_name, param);
+            keys = fieldnames(params);
+            for idx = 1:length(keys)
+                key = keys{idx};
+                params.(key) = params.(key) - obj.lr .* grads.(key);
             end
         end
     end

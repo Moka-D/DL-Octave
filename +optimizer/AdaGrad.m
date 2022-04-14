@@ -19,28 +19,20 @@ classdef AdaGrad < handle
         function params = update(obj, params, grads)
             % パラメータの更新
 
-            fields = fieldnames(params);
+            keys = fieldnames(params);
 
             if isempty(obj.h)
                 obj.h = struct();
-                for i_field = 1:length(fields)
-                    val = getfield(params, fields{i_field});
-                    h = zeros(size(val));
-                    obj.h = setfield(obj.h, fields{i_field}, h);
+                for idx = 1:length(keys)
+                    key = keys{idx};
+                    obj.h.(key) = zeros(size(params.(key)));
                 end
             end
 
-            for i_field = 1:length(fields)
-                field_name = fields{i_field};
-                param = getfield(params, field_name);
-                grad = getfield(grads, field_name);
-                h = getfield(obj.h, field_name);
-
-                h = h + grad .* grad;
-                param = param - obj.lr .* grad ./ (sqrt(h) + 1e-7);
-
-                obj.h = setfield(obj.h, field_name, h);
-                params = setfield(params, field_name, param);
+            for idx = 1:length(keys)
+                key = keys{idx};
+                obj.h.(key) = obj.h.(key) + grads.(key) .* grads.(key);
+                params.(key) = params.(key) - obj.lr .* grads.(key) ./ (sqrt(obj.h.(key)) + 1e-7);
             end
         end
     end

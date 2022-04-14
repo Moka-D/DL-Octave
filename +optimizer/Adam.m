@@ -36,37 +36,26 @@ classdef Adam < handle
         function params = update(obj, params, grads)
             % パラメータの更新
 
-            fields = fieldnames(params);
+            keys = fieldnames(params);
 
             if isempty(obj.m)
                 obj.m = struct();
                 obj.v = struct();
-                for i_field = 1:length(fields)
-                    field_name = fields{i_field};
-                    val = getfield(params, field_name);
-                    val = zeros(size(val));
-                    obj.m = setfield(obj.m, field_name, val);
-                    obj.v = setfield(obj.v, field_name, val);
+                for idx = 1:length(keys)
+                    key = keys{idx};
+                    obj.m.(key) = zeros(size(params.(key)));
+                    obj.v.(key) = zeros(size(params.(key)));
                 end
             end
 
             obj.iter = obj.iter + 1;
             lr_t = obj.lr .* sqrt(1 - obj.beta2.^obj.iter) ./ (1 - obj.beta1.^obj.iter);
 
-            for i_field = 1:length(fields)
-                field_name = fields{i_field};
-                param = getfield(params, field_name);
-                grad = getfield(grads, field_name);
-                m = getfield(obj.m, field_name);
-                v = getfield(obj.v, field_name);
-
-                m = m + (1 - obj.beta1) .* (grad - m);
-                v = v + (1 - obj.beta2) .* (grad.^2 - v);
-                param = param - lr_t .* m ./ (sqrt(v) + 1e-7);
-
-                obj.m = setfield(obj.m, field_name, m);
-                obj.v = setfield(obj.v, field_name, v);
-                params = setfield(params, field_name, param);
+            for idx = 1:length(keys)
+                key = keys{idx};
+                obj.m.(key) = obj.m.(key) + (1 - obj.beta1) .* (grad - obj.m.(key));
+                obj.v.(key) = obj.v.(key) + (1 - obj.beta2) .* (grad.^2 - obj.v.(key));
+                params.(key) = params.(key) - lr_t .* obj.m.(key) ./ (sqrt(obj.v.(key)) + 1e-7);
             end
         end
     end

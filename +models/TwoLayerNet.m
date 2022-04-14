@@ -40,9 +40,8 @@ classdef TwoLayerNet < handle
             obj.layers.Affine2.b = obj.params.b2;
 
             layer_names = fieldnames(obj.layers);
-            for i_layer = 1:length(layer_names)
-                layer = getfield(obj.layers, layer_names{i_layer});
-                x = layer.forward(x);
+            for idx = 1:length(layer_names)
+                x = obj.layers.(layer_names{idx}).forward(x);
             end
             y = x;
         end
@@ -75,9 +74,8 @@ classdef TwoLayerNet < handle
             dout = 1;
             dout = obj.last_layer.backward(dout);
             layer_names = fieldnames(obj.layers);
-            for i_layer = length(layer_names):-1:1
-                layer = getfield(obj.layers, layer_names{i_layer});
-                dout = layer.backward(dout);
+            for idx = length(layer_names):-1:1
+                dout = obj.layers.(layer_names{idx}).backward(dout);
             end
 
             % 勾配設定

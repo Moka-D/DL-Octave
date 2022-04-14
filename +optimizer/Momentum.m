@@ -26,29 +26,20 @@ classdef Momentum < handle
         function params = update(obj, params, grads)
             % パラメータの更新
 
-            fields = fieldnames(params);
+            keys = fieldnames(params);
 
             if isempty(obj.v)
                 obj.v = struct();
-                for i_field = 1:length(fields)
-                    field_name = fields{i_field};
-                    val = getfield(params, field_name);
-                    v = zeros(size(val));
-                    obj.v = setfield(obj.v, field_name, v);
+                for idx = 1:length(keys)
+                    key = keys{idx};
+                    obj.v.(key) = zeros(size(params.(key)));
                 end
             end
 
-            for i_field = 1:length(fields)
-                field_name = fields{i_field};
-                param = getfield(params, field_name);
-                grad = getfield(grads, field_name);
-                v = getfield(obj.v, field_name);
-
-                v = obj.momentum .* v - obj.lr .* grad;
-                param = param + v;
-
-                obj.v = setfield(obj.v, field_name, v);
-                params = setfield(params, field_name, param);
+            for idx = 1:length(keys)
+                key = keys{idx};
+                obj.v.(key) = obj.momentum .* obj.v.(key) - obj.lr .* grads.(key);
+                params.(key) = params.(key) + obj.v.(key);
             end
         end
     end

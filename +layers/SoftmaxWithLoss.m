@@ -31,8 +31,8 @@ classdef SoftmaxWithLoss < handle
 
             batch_size = size(obj.t, 1);
 
-            if (size(obj.t, 1) == size(obj.y, 1)) ...   % one-hot-labelの場合
-                && (size(obj.t, 2) == size(obj.y, 2))
+            if (size(obj.t, 1) == size(obj.y, 1)) && ...
+               (size(obj.t, 2) == size(obj.y, 2))   % one-hot-labelの場合
                 dx = (obj.y - obj.t) ./ batch_size;
             else
                 dx = obj.y;
