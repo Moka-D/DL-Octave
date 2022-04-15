@@ -8,20 +8,20 @@ batch_size = 128;
 max_iterations = 2000;
 
 % 実験の設定
-optimizers = struct();
-optimizers.SGD      = optimizer.SGD();
-optimizers.Momentum = optimizer.Momentum();
-optimizers.AdaGrad  = optimizer.AdaGrad();
-optimizers.Adam     = optimizer.Adam();
+optimizers = struct( ...
+    'SGD',      optimizer.SGD(), ...
+    'Momentum', optimizer.Momentum(), ...
+    'AdaGrad',  optimizer.AdaGrad(), ...
+    'Adam',     optimizer.Adam() ...
+);
 
 networks = struct();
 train_loss = struct();
-optimizer_names = fieldnames(optimizers);
-for i_optimizer = 1:length(optimizer_names)
-    key = optimizer_names{i_optimizer};
-    net = models.TwoLayerNet(784, 50, 10);
-    networks = setfield(networks, key, net);
-    train_loss = setfield(train_loss, key, zeros(1, max_iterations));
+keys = fieldnames(optimizers);
+for idx = 1:length(keys)
+    key = keys{idx};
+    networks.(key) = models.TwoLayerNet(784, 50, 10);
+    train_loss.(key) = zeros(1, max_iterations);
 end
 
 % 訓練の開始
@@ -30,25 +30,20 @@ for iter = 1:max_iterations
     x_batch = x_train(batch_mask, :);
     t_batch = t_train(batch_mask, :);
 
-    for i_optimizer = 1:length(optimizer_names)
-        key = optimizer_names{i_optimizer};
-        net = getfield(networks, key);
-        optim = getfield(optimizers, key);
-        loss_list = getfield(train_loss, key);
+    for idx = 1:length(keys)
+        key = keys{idx};
+        grads = networks.(key).gradient(x_batch, t_batch);
+        networks.(key).params = optimizers.(key).update(networks.(key).params, grads);
 
-        grads = net.gradient(x_batch, t_batch);
-        net.params = optim.update(net.params, grads);
-
-        loss_list(1, iter) = net.loss(x_batch, t_batch);
-        train_loss = setfield(train_loss, key, loss_list);
+        loss = networks.(key).loss(x_batch, t_batch);
+        train_loss.(key)(1, iter) = loss;
     end
 
     if mod(iter, 100) == 0
         fprintf('===========iteration:%d===========\n', iter);
-        for i_optimizer = 1:length(optimizer_names)
-            key = optimizer_names{i_optimizer};
-            net = getfield(networks, key);
-            loss = net.loss(x_batch, t_batch);
+        for idx = 1:length(keys)
+            key = keys{idx};
+            loss = networks.(key).loss(x_batch, t_batch);
             fprintf('%s:%f\n', key, loss);
         end
     end

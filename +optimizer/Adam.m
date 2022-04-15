@@ -53,8 +53,8 @@ classdef Adam < handle
 
             for idx = 1:length(keys)
                 key = keys{idx};
-                obj.m.(key) = obj.m.(key) + (1 - obj.beta1) .* (grad - obj.m.(key));
-                obj.v.(key) = obj.v.(key) + (1 - obj.beta2) .* (grad.^2 - obj.v.(key));
+                obj.m.(key) = obj.m.(key) + (1 - obj.beta1) .* (grads.(key) - obj.m.(key));
+                obj.v.(key) = obj.v.(key) + (1 - obj.beta2) .* (grads.(key).^2 - obj.v.(key));
                 params.(key) = params.(key) - lr_t .* obj.m.(key) ./ (sqrt(obj.v.(key)) + 1e-7);
             end
         end
