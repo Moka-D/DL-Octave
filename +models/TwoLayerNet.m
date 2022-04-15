@@ -17,17 +17,18 @@ classdef TwoLayerNet < handle
             end
 
             % 重みの初期化
-            obj.params = struct();
-            obj.params.W1 = weight_init_std .* randn(input_size, hidden_size);
-            obj.params.b1 = zeros(1, hidden_size);
-            obj.params.W2 = weight_init_std .* randn(hidden_size, output_size);
-            obj.params.b2 = zeros(1, output_size);
+            W1 = weight_init_std .* randn(input_size, hidden_size);
+            b1 = zeros(1, hidden_size);
+            W2 = weight_init_std .* randn(hidden_size, output_size);
+            b2 = zeros(1, output_size);
+            obj.params = struct('W1', W1, 'b1', b1, 'W2', W2, 'b2', b2);
 
             % レイヤの生成
-            obj.layers = struct();
-            obj.layers.Affine1 = layers.Affine(obj.params.W1, obj.params.b1);
-            obj.layers.Relu1 = layers.Relu();
-            obj.layers.Affine2 = layers.Affine(obj.params.W2, obj.params.b2);
+            obj.layers = struct( ...
+                'Affine1', layers.Affine(W1, b1), ...
+                'Relu1',   layers.Relu(), ...
+                'Affine2', layers.Affine(W2, b2) ...
+            );
             obj.last_layer = layers.SoftmaxWithLoss();
         end
 
@@ -79,11 +80,12 @@ classdef TwoLayerNet < handle
             end
 
             % 勾配設定
-            grads = struct();
-            grads.W1 = obj.layers.Affine1.dW;
-            grads.b1 = obj.layers.Affine1.db;
-            grads.W2 = obj.layers.Affine2.dW;
-            grads.b2 = obj.layers.Affine2.db;
+            grads = struct( ...
+                'W1', obj.layers.Affine1.dW, ...
+                'b1', obj.layers.Affine1.db, ...
+                'W2', obj.layers.Affine2.dW, ...
+                'b2', obj.layers.Affine2.db ...
+            );
         end
     end
 end
