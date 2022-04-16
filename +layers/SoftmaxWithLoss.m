@@ -37,7 +37,7 @@ classdef SoftmaxWithLoss < handle
             else
                 dx = obj.y;
                 tmp = zeros(size(dx));
-                tmp(1:batch_size, obj.t) = 1;
+                tmp(repmat(1:size(y, 2), batch_size, 1) .* t > 0) = 1;
                 dx = (dx - tmp) ./ batch_size;
             end
         end

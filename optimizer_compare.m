@@ -59,4 +59,5 @@ for idx = 1:length(keys)
 end
 xlabel('iterations');
 ylabel('loss');
+ylim([0 1]);
 legend;
