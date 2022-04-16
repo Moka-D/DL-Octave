@@ -11,10 +11,10 @@ classdef Sigmoid < handle
             obj.out = [];
         end
 
-        function y = forward(obj, x)
+        function out = forward(obj, x)
             % 順伝播
-            obj.out = 1 ./ (1 + exp(-x));
-            y = obj.out;
+            obj.out = functions.sigmoid(x);
+            out = obj.out;
         end
 
         function dx = backward(obj, dy)
