@@ -12,6 +12,7 @@ classdef BatchNormalization < handle
         running_var
         batch_size
         xc
+        xn
         std_
         dgamma
         dbeta
@@ -42,6 +43,7 @@ classdef BatchNormalization < handle
             % backward時に使用する中間データ
             obj.batch_size =[];
             obj.xc = [];
+            obj.xn = [];
             obj.std_ = [];
             obj.dgamma = [];
             obj.dbeta = [];
@@ -88,7 +90,7 @@ classdef BatchNormalization < handle
                 xc = x - mu;
                 var_ = mean(xc.^2, 1);
                 std_ = sqrt(var_ + 10e-7);
-                xn = xc / std_;
+                xn = xc ./ std_;
 
                 obj.batch_size = size(x, 1);
                 obj.xc = xc;
