@@ -20,7 +20,7 @@ train_loss = struct();
 keys = fieldnames(optimizers);
 for idx = 1:length(keys)
     key = keys{idx};
-    networks.(key) = models.TwoLayerNet(784, 50, 10);
+    networks.(key) = models.MultiLayerNet(784, [100 100 100 100], 10);
     train_loss.(key) = zeros(1, max_iterations);
 end
 
@@ -48,3 +48,15 @@ for iter = 1:max_iterations
         end
     end
 end
+
+% グラフの描画
+x = 1:max_iterations;
+figure;
+hold on;
+for idx = 1:length(keys)
+    key = keys{idx};
+    plot(x, util.smooth_curve(train_loss.(key)), 'DisplayName', key);
+end
+xlabel('iterations');
+ylabel('loss');
+legend;

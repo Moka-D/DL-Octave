@@ -62,6 +62,15 @@ classdef MultiLayerNet < handle
         end
 
         function y = predict(obj, x)
+
+            % Affine層のパラメータ更新
+            obj.update_weight();
+
+            keys = fieldnames(obj.layers);
+            for idx = 1:length(keys)
+                x = obj.layers.(keys{idx}).forward(x);
+            end
+            y = x;
         end
 
         function ret = loss(obj, x, t)
@@ -79,14 +88,49 @@ classdef MultiLayerNet < handle
         end
 
         function ret = accuracy(obj, x, t)
+            y = obj.predict(x);
+            [~, y] = max(y, [], 2);
+            if size(t, 2) ~=1
+                [~, t] = max(t, [], 2);
+            end
+
+            ret = sum((y==t)(:)) ./ size(x, 1);
         end
 
         function grads = numerical_gradient(obj, x, y)
             % 数値微分による勾配計算
+
+            loss_W = @(W) obj.loss(x, t);
+
+            grads = struct();
+            for idx = 1:obj.hidden_layer_num+1
+                grads.(strcat('W', num2str(idx))) = gradient.numerical_gradient(loss_W, obj.params.(strcat('W', num2str(idx))));
+                grads.(strcat('b', num2str(idx))) = gradient.numerical_gradient(loss_W, obj.params.(strcat('b', num2str(idx))));
+            end
         end
 
         function grads = gradient(obj, x, t)
             % 誤差逆伝播法による勾配計算
+
+            % forward
+            obj.loss(x, t);
+
+            % backward
+            dout = 1;
+            dout = obj.last_layer.backward(dout);
+
+            layer_names = fieldnames(obj.layers);
+            for idx = length(layer_names):-1:1
+                dout = obj.layers.(layer_names{idx}).backward(dout);
+            end
+
+            % 設定
+            grads = struct();
+            for idx = 1:obj.hidden_layer_num+1
+                layer = obj.layers.(strcat('Affine', num2str(idx)));
+                grads.(strcat('W', num2str(idx))) = layer.dW + obj.weight_decay_lambda .* layer.W;
+                grads.(strcat('b', num2str(idx))) = layer.db;
+            end
         end
     end
 
@@ -113,6 +157,14 @@ classdef MultiLayerNet < handle
                 b = zeros(1, all_size_list(idx + 1));
                 obj.params.(strcat('W', num2str(idx))) = W;
                 obj.params.(strcat('b', num2str(idx))) = b;
+            end
+        end
+
+        function update_weight(obj)
+            % Affine層のパラメータ更新
+            for idx = 1:obj.hidden_layer_num+1
+                obj.layers.(strcat('Affine', num2str(idx))).W = obj.params.(strcat('W', num2str(idx)));
+                obj.layers.(strcat('Affine', num2str(idx))).b = obj.params.(strcat('b', num2str(idx)));
             end
         end
     end
