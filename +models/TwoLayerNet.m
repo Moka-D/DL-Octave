@@ -62,7 +62,7 @@ classdef TwoLayerNet < handle
                 [~, t] = max(t, [], 2);
             end
 
-            ret = sum(y == t) / size(x, 1);
+            ret = sum((y==t)(:)) ./ size(x, 1);
         end
 
         function grads = gradient(obj, x, t)
