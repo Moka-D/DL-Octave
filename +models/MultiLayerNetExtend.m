@@ -133,10 +133,10 @@ classdef MultiLayerNetExtend < handle
                 [~, t] = max(t, [], 2);
             end
 
-            ret = sum((y==t)(:)) ./ size(x, 1);
+            ret = sum(y==t, 'all') ./ size(x, 1);
         end
 
-        function grads = numerical_gradient(obj, x, y)
+        function grads = numerical_gradient(obj, x, t)
             % 数値微分による勾配計算
 
             loss_W = @(W) obj.loss(x, t);
@@ -192,11 +192,11 @@ classdef MultiLayerNetExtend < handle
 
             for idx = 1:length(all_size_list)-1
                 if ischar(weight_init_std)
-                    if strcmp(lower(weight_init_std), 'relu') || ...
-                       strcmp(lower(weight_init_std), 'he')
+                    if strcmpi(weight_init_std, 'relu') || ...
+                       strcmpi(weight_init_std, 'he')
                         scale = sqrt(2 / all_size_list(idx));   % ReLUの推奨初期値
-                    elseif strcmp(lower(weight_init_std), 'sigmoid') || ...
-                           strcmp(lower(weight_init_std), 'xavier')
+                    elseif strcmpi(weight_init_std, 'sigmoid') || ...
+                           strcmpi(weight_init_std, 'xavier')
                         scale = sqrt(1 / all_size_list(idx));   % Sigmoidの推奨初期値
                     end
                 else
