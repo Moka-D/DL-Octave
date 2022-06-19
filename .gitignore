@@ -1,7 +1,3 @@
-/dataset
-/.vscode
+/.tmp
 
-*.fig
-*.mat
-*.pkl
-*.gz
+*.asv
