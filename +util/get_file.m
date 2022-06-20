@@ -1,5 +1,5 @@
 function file_path = get_file(url, file_name)
-    % file_path = mdl.utils.get_file(url, file_names)
+    % file_path = util.get_file(url, file_names)
     %
     % Download a file from the 'url' if it is not in the cache.
     %

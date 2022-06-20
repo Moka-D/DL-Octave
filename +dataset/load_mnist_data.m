@@ -125,7 +125,7 @@ function labels = load_label(filepath)
         num_items = fread(fid, 1, 'int32', 0, 'b');
 
         labels = fread(fid, inf, 'unsigned char=>uint8');
-        labels = reshape(labels, num_items, 1);
+        labels = reshape(labels, 1, num_items);
         labels = labels + 1;
     catch ME
         % NOP
@@ -142,12 +142,12 @@ end
 
 function out = change_one_hot_label(labels)
     N = length(labels);
-    out = zeros([N 10], 'uint8');
-    ind = sub2ind([N 10], 1:N, labels.');
+    out = zeros([10, N], 'uint8');
+    ind = sub2ind(size(out), labels, 1:N);
     out(ind) = uint8(1);
 end
 
 function out = flatten(data)
-    N = size(data, 4);
-    out = reshape(data, [], N).';
+    [H, W, ~, N] = size(data);
+    out = reshape(data, H * W, N);
 end

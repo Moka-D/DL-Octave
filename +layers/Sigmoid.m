@@ -6,20 +6,15 @@ classdef Sigmoid < handle
     end
 
     methods
-        function obj = Sigmoid()
-            % コンストラクタ
-            obj.out = [];
-        end
-
-        function out = forward(obj, x)
+        function out = forward(self, x)
             % 順伝播
-            obj.out = functions.sigmoid(x);
-            out = obj.out;
+            out = functions.sigmoid(x);
+            self.out = out;
         end
 
-        function dx = backward(obj, dy)
+        function dx = backward(self, dout)
             % 逆伝播
-            dx = dout .* (1.0 - obj.out) .* obj.out;
+            dx = dout .* (1 - self.out) .* self.out;
         end
     end
 end

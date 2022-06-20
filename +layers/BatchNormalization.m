@@ -4,16 +4,18 @@ classdef BatchNormalization < handle
     % http://arxiv.org/abs/1502.03167
 
     properties
-        gamma_
-        beta_
+        gamma
+        beta
         momentum
-        input_shape
+        input_sz        % Conv層の場合は4次元、全結合層の場合は2次元
         running_mean
         running_var
+        xn
+
+        % backward時に使用する中間データ
         batch_size
         xc
-        xn
-        std_
+        std
         dgamma
         dbeta
     end
@@ -31,94 +33,84 @@ classdef BatchNormalization < handle
                 running_var = [];
             end
 
-            obj.gamma_ = gamma_;
-            obj.beta_ = beta_;
+            obj.gamma = gamma_;
+            obj.beta = beta_;
             obj.momentum = momentum;
-            obj.input_shape = [];   % Conv層の場合は4次元、全結合層の場合は2次元
 
             % テスト時に使用する平均と分散
             obj.running_mean = running_mean;
             obj.running_var = running_var;
-
-            % backward時に使用する中間データ
-            obj.batch_size =[];
-            obj.xc = [];
-            obj.xn = [];
-            obj.std_ = [];
-            obj.dgamma = [];
-            obj.dbeta = [];
         end
 
-        function out = forward(obj, x, train_flg)
+        function out = forward(self, x, train_flg)
             % デフォルト引数
             if ~exist('train_flg', 'var')
                 train_flg = true;
             end
 
-            obj.input_shape = size(x);
-            if ndims(x) ~= 2
-                N = size(x, 1);
-                x = reshape(x, N, []);
+            self.input_sz = size(x);
+            if ~ismatrix(x)
+                [~, ~, ~, N] = size(x);
+                x = reshape(x, [], N);
             end
 
-            out = obj.forward_(x, train_flg);
-            out = reshape(out, obj.input_shape);
+            out = self.forward_(x, train_flg);
+            out = reshape(out, self.input_sz);
         end
 
         function dx = backward(obj, dout)
-            if ndims(dout) ~= 2
-                N = size(dout, 1);
-                dout = reshape(dout, N, []);
+            if ~ismatrix(dout)
+                [~, ~, ~, N] = size(dout);
+                dout = reshape(dout, [], N);
             end
 
             dx = obj.backward_(dout);
-
-            dx = reshape(dx, obj.input_shape);
+            dx = reshape(dx, obj.input_sz);
         end
     end
 
     methods (Access = private, Hidden = true)
-        function out = forward_(obj, x, train_flg)
-            if isempty(obj.running_mean)
-                D = size(x, 2);
-                obj.running_mean = zeros(1, D);
-                obj.running_var = zeros(1, D);
+        function out = forward_(self, x, train_flg)
+            if isempty(self.running_mean)
+                [D, ~] = size(x);
+                self.running_mean = zeros(D, 1);
+                self.running_var = zeros(D, 1);
             end
 
             if train_flg
-                mu = mean(x, 1);
-                xc = x - mu;
-                var_ = mean(xc.^2, 1);
+                mu = mean(x, 2);
+                xc_ = x - mu;
+                var_ = mean(xc_.^2, 2);
                 std_ = sqrt(var_ + 10e-7);
-                xn = xc ./ std_;
+                xn_ = xc_ ./ std_;
 
-                obj.batch_size = size(x, 1);
-                obj.xc = xc;
-                obj.xn = xn;
-                obj.std_ = std_;
-                obj.running_mean = obj.momentum .* obj.running_mean + (1-obj.momentum) .* mu;
-                obj.running_var = obj.momentum .* obj.running_var + (1-obj.momentum) .* var_;
+                self.batch_size = size(x, 1);
+                self.xc = xc_;
+                self.xn = xn_;
+                self.std = std_;
+                self.running_mean = self.momentum .* self.running_mean + (1 - self.momentum) .* mu;
+                self.running_var = self.momentum .* self.running_var + (1 - self.momentum) .* var_;
             else
-                xc = x - obj.running_mean;
-                xn = xc ./ sqrt(obj.running_var + 10e-7);
+                xc_ = x - self.running_mean;
+                xn_ = xc_ ./ sqrt(self.running_var + 10e-7);
             end
 
-            out = obj.gamma_ .* xn + obj.beta_;
+            out = self.gamma .* xn_ + self.beta;
         end
 
-        function dx = backward_(obj, dout)
-            dbeta = sum(dout, 1);
-            dgamma = sum(obj.xn .* dout, 1);
-            dxn = obj.gamma_ .* dout;
-            dxc = dxn ./ obj.std_;
-            dstd = -sum((dxn .* obj.xc) ./ (obj.std_ .* obj.std_), 1);
-            dvar = 0.5 .* dstd ./ obj.std_;
-            dxc = dxc + (2.0 ./ obj.batch_size) .* obj.xc .* dvar;
+        function dx = backward_(self, dout)
+            dbeta_ = sum(dout, 2);
+            dgamma_ = sum(self.xn .* dout, 2);
+            dxn = self.gamma .* dout;
+            dxc = dxn ./ self.std;
+            dstd = -sum((dxn .* self.xc) ./ (self.std .* self.std), 2);
+            dvar = 0.5 .* dstd ./ self.std;
+            dxc = dxc + (2.0 ./ self.batch_size) .* self.xc .* dvar;
             dmu = sum(dxc, 1);
-            dx = dxc - dmu ./ obj.batch_size;
+            dx = dxc - dmu ./ self.batch_size;
 
-            obj.dgamma = dgamma;
-            obj.dbeta = dbeta;
+            self.dgamma = dgamma_;
+            self.dbeta = dbeta_;
         end
     end
 end

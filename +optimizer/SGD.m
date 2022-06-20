@@ -6,21 +6,19 @@ classdef SGD < handle
     end
 
     methods
-        function obj = SGD(lr)
+        function self = SGD(lr)
             % コンストラクタ
 
             if ~exist('lr', 'var')
                 lr = 0.01;
             end
-            obj.lr = lr;
+            self.lr = lr;
         end
 
-        function params = update(obj, params, grads)
+        function params = update(self, params, grads)
             % パラメータの更新
-            keys = fieldnames(params);
-            for idx = 1:length(keys)
-                key = keys{idx};
-                params.(key) = params.(key) - obj.lr .* grads.(key);
+            for key = fieldnames(params)'
+                params.(key{1}) = params.(key{1}) - self.lr .* grads.(key{1});
             end
         end
     end

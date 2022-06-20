@@ -7,38 +7,35 @@ classdef Affine < handle
         x   % 入力
         dW  % 重みの微分
         db  % バイアスの微分
-        original_x_shape
+        original_x_sz
     end
 
     methods
-        function obj = Affine(W, b)
+        function self = Affine(W, b)
             % コンストラクタ
-            obj.W = W;
-            obj.b = b;
-            obj.x = [];
-            obj.dW = [];
-            obj.db = [];
-            obj.original_x_shape = [];
+            self.W = W;
+            self.b = b;
         end
 
-        function out = forward(obj, x)
+        function out = forward(self, x)
             % 順伝播
 
             % テンソル対応
-            obj.original_x_shape = size(x);
-            x = reshape(x, size(x, 1), []);
+            self.original_x_sz = size(x);
+            x = reshape(x, [], size(x, ndims(x)));
 
-            obj.x = x;
-            out = obj.x * obj.W + obj.b;
+            self.x = x;
+            out = self.W * self.x + self.b;
         end
 
-        function dx = backward(obj, dout)
+        function dx = backward(self, dout)
             % 逆伝播
-            dx = dout * obj.W.';
-            obj.dW = obj.x.' * dout;
-            obj.db = sum(dout, 1);
+            dx = self.W.' * dout;
+            self.dW = dout * self.x.';
+            self.db = sum(dout, 2);
 
-            dx = reshape(dx, obj.original_x_shape); % テンソル対応
+            % テンソル対応
+            dx = reshape(dx, self.original_x_sz);
         end
     end
 end
