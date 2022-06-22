@@ -72,8 +72,8 @@ classdef TwoLayerNet < handle
             % 逆伝播計算
             dout = 1;
             dout = self.last_layer.backward(dout);
-            for layer_name = flip(fieldnames(self.layers)')
-                dout = self.layers.(layer_name{1}).backward(dout);
+            for key = flip(fieldnames(self.layers)')
+                dout = self.layers.(key{1}).backward(dout);
             end
 
             % 勾配設定

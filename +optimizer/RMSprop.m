@@ -24,7 +24,7 @@ classdef RMSprop < handle
 
         function update(self, params, grads)
             if isempty(self.h)
-                self.h = containers.Map();
+                self.h = containers.Map;
                 for key = keys(params)
                     self.h(key{1}) = zeros(size(params(key{1})));
                 end

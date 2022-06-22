@@ -19,7 +19,7 @@ classdef AdaGrad < handle
             % パラメータの更新
 
             if isempty(self.h)
-                self.h = containers.Map();
+                self.h = containers.Map;
                 for key = keys(params)
                     self.h(key{1}) = zeros(size(params(key{1})));
                 end

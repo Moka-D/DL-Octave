@@ -24,7 +24,7 @@ classdef Nesterov < handle
 
         function update(self, params, grads)
             if isempty(self.v)
-                self.v = containers.Map();
+                self.v = containers.Map;
                 for key = keys(params)
                     self.v(key{1}) = zeros(size(params(key{1})));
                 end
