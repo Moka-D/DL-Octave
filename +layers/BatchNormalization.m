@@ -21,7 +21,7 @@ classdef BatchNormalization < handle
     end
 
     methods
-        function obj = BatchNormalization(gamma_, beta_, momentum, running_mean, running_var)
+        function self = BatchNormalization(gamma_, beta_, momentum, running_mean, running_var)
             % デフォルト引数
             if ~exist('momentum', 'var')
                 momentum = 0.9;
@@ -33,13 +33,13 @@ classdef BatchNormalization < handle
                 running_var = [];
             end
 
-            obj.gamma = gamma_;
-            obj.beta = beta_;
-            obj.momentum = momentum;
+            self.gamma = gamma_;
+            self.beta = beta_;
+            self.momentum = momentum;
 
             % テスト時に使用する平均と分散
-            obj.running_mean = running_mean;
-            obj.running_var = running_var;
+            self.running_mean = running_mean;
+            self.running_var = running_var;
         end
 
         function out = forward(self, x, train_flg)
@@ -58,14 +58,14 @@ classdef BatchNormalization < handle
             out = reshape(out, self.input_sz);
         end
 
-        function dx = backward(obj, dout)
+        function dx = backward(self, dout)
             if ~ismatrix(dout)
                 [~, ~, ~, N] = size(dout);
                 dout = reshape(dout, [], N);
             end
 
-            dx = obj.backward_(dout);
-            dx = reshape(dx, obj.input_sz);
+            dx = self.backward_(dout);
+            dx = reshape(dx, self.input_sz);
         end
     end
 

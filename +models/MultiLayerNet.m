@@ -44,20 +44,20 @@ classdef MultiLayerNet < handle
 
             % レイヤの生成
             activation_layer = containers.Map({'sigmoid', 'relu'}, ...
-                                              {layers.Sigmoid, layers.Relu});
+                                              {layers.Sigmoid(), layers.Relu()});
             self.layers = struct();
             for idx = 1:self.hidden_layer_num
-                self.layers.(strcat('Affine', num2str(idx))) = ...
-                    layers.Affine(self.params(strcat('W', num2str(idx))), ...
-                                  self.params(strcat('b', num2str(idx))));
-                self.layers.(strcat('Activation_function', num2str(idx))) = ...
-                    activation_layer(p.Results.activation);
+                self.layers.(strcat('Affine', num2str(idx))) ...
+                    = layers.Affine(self.params(strcat('W', num2str(idx))), ...
+                                    self.params(strcat('b', num2str(idx))));
+                self.layers.(strcat('Activation_function', num2str(idx))) ...
+                    = activation_layer(p.Results.activation);
             end
 
             idx = self.hidden_layer_num + 1;
-            self.layers.(strcat('Affine', num2str(idx))) = ...
-                layers.Affine(self.params(strcat('W', num2str(idx))), ...
-                              self.params(strcat('b', num2str(idx))));
+            self.layers.(strcat('Affine', num2str(idx))) ...
+                = layers.Affine(self.params(strcat('W', num2str(idx))), ...
+                                self.params(strcat('b', num2str(idx))));
 
             self.last_layer = layers.SoftmaxWithLoss();
         end
@@ -104,8 +104,10 @@ classdef MultiLayerNet < handle
 
             grads = containers.Map;
             for idx = 1:self.hidden_layer_num + 1
-                grads.(strcat('W', num2str(idx))) = gradient.numerical_gradient(loss_W, self.params(strcat('W', num2str(idx))));
-                grads.(strcat('b', num2str(idx))) = gradient.numerical_gradient(loss_W, self.params(strcat('b', num2str(idx))));
+                grads.(strcat('W', num2str(idx))) ...
+                    = gradient.numerical_gradient(loss_W, self.params(strcat('W', num2str(idx))));
+                grads.(strcat('b', num2str(idx))) ...
+                    = gradient.numerical_gradient(loss_W, self.params(strcat('b', num2str(idx))));
             end
         end
 
@@ -125,9 +127,9 @@ classdef MultiLayerNet < handle
             % 設定
             grads = containers.Map;
             for idx = 1:self.hidden_layer_num + 1
-                grads(strcat('W', num2str(idx))) = ...
-                    self.layers.(strcat('Affine', num2str(idx))).dW ...
-                    + self.weight_decay_lambda .* self.layers.(strcat('Affine', num2str(idx))).W;
+                grads(strcat('W', num2str(idx))) ...
+                    = self.layers.(strcat('Affine', num2str(idx))).dW ...
+                      + self.weight_decay_lambda .* self.layers.(strcat('Affine', num2str(idx))).W;
                 grads(strcat('b', num2str(idx))) = self.layers.(strcat('Affine', num2str(idx))).db;
             end
         end
@@ -141,19 +143,17 @@ classdef MultiLayerNet < handle
 
             for idx = 1:length(all_size_list) - 1
                 if ischar(weight_init_std) || isstring(weight_init_std)
-                    if strcmpi(weight_init_std, 'relu') || ...
-                        strcmpi(weight_init_std, 'he')
+                    if strcmpi(weight_init_std, 'relu') || strcmpi(weight_init_std, 'he')
                         scale = sqrt(2 / all_size_list(idx));   % ReLUの推奨初期値
-                    elseif strcmpi(weight_init_std, 'sigmoid') || ...
-                            strcmpi(weight_init_std, 'xavier')
+                    elseif strcmpi(weight_init_std, 'sigmoid') || strcmpi(weight_init_std, 'xavier')
                         scale = sqrt(1 / all_size_list(idx));   % Sigmoidの推奨初期値
                     end
                 else
                     scale = weight_init_std;
                 end
 
-                self.params(strcat('W', num2str(idx))) = ...
-                    scale .* randn(all_size_list(idx + 1), all_size_list(idx));
+                self.params(strcat('W', num2str(idx))) ...
+                    = scale .* randn(all_size_list(idx + 1), all_size_list(idx));
                 self.params(strcat('b', num2str(idx))) = zeros(all_size_list(idx + 1), 1);
             end
         end
@@ -161,8 +161,10 @@ classdef MultiLayerNet < handle
         function update_weight(self)
             % Affine層のパラメータ更新
             for idx = 1:self.hidden_layer_num + 1
-                self.layers.(strcat('Affine', num2str(idx))).W = self.params(strcat('W', num2str(idx)));
-                self.layers.(strcat('Affine', num2str(idx))).b = self.params(strcat('b', num2str(idx)));
+                self.layers.(strcat('Affine', num2str(idx))).W ...
+                    = self.params(strcat('W', num2str(idx)));
+                self.layers.(strcat('Affine', num2str(idx))).b ...
+                    = self.params(strcat('b', num2str(idx)));
             end
         end
     end
