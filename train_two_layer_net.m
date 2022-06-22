@@ -23,7 +23,7 @@ function train_two_layer_net
         grads = net.gradient(x_batch, t_batch);
 
         % 更新
-        net.params = optim.update(net.params, grads);
+        optim.update(net.params, grads);
 
         loss = net.loss(x_batch, t_batch);
         train_loss_list(iter + 1) = loss;

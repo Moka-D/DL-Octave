@@ -8,7 +8,7 @@ classdef RMSprop < handle
     end
 
     methods
-        function obj = RMSprop(lr, decay_rate)
+        function self = RMSprop(lr, decay_rate)
             % コンストラクタ
 
             if ~exist('lr', 'var')
@@ -18,26 +18,22 @@ classdef RMSprop < handle
                 decay_rate = 0.99;
             end
 
-            obj.lr = lr;
-            obj.decay_rate = decay_rate;
-            obj.h = [];
+            self.lr = lr;
+            self.decay_rate = decay_rate;
         end
 
-        function params = update(obj, params, grads)
-            keys = fieldnames(params);
-            if isempty(obj.h)
-                obj.h = struct();
-                for idx = 1:length(keys)
-                    key = keys{idx};
-                    obj.h.(key) = zeros(size(params.(key)));
+        function update(self, params, grads)
+            if isempty(self.h)
+                self.h = containers.Map();
+                for key = keys(params)
+                    self.h(key{1}) = zeros(size(params(key{1})));
                 end
             end
 
-            for idx = 1:length(keys)
-                key = keys{idx};
-                obj.h.(key) = obj.h.(key) .* obj.decay_rate;
-                obj.h.(key) = obj.h.(key) + (1 - obj.decay_rate) .* grads.(key) .* grads.(key);
-                params.(key) = params.(key) - obj.lr .* grads.(key) ./ (sqrt(obj.h.(key)) + 1e-7);
+            for key = keys(params)
+                self.h(key{1}) = self.h(key{1}) .* self.decay_rate;
+                self.h(key{1}) = self.h(key{1}) + (1 - self.decay_rate) .* grads(key{1}) .* grads(key{1});
+                params(key{1}) = params(key{1}) - self.lr .* grads(key{1}) ./ (sqrt(self.h(key{1})) + 1e-7);
             end
         end
     end

@@ -12,7 +12,7 @@ classdef Adam < handle
     end
 
     methods
-        function obj = Adam(lr, beta1, beta2)
+        function self = Adam(lr, beta1, beta2)
             % コンストラクタ
 
             if ~exist('lr', 'var')
@@ -25,37 +25,31 @@ classdef Adam < handle
                 beta2 = 0.999;
             end
 
-            obj.lr = lr;
-            obj.beta1 = beta1;
-            obj.beta2 = beta2;
-            obj.iter = 0;
-            obj.m = [];
-            obj.v = [];
+            self.lr = lr;
+            self.beta1 = beta1;
+            self.beta2 = beta2;
+            self.iter = 0;
         end
 
-        function params = update(obj, params, grads)
+        function update(self, params, grads)
             % パラメータの更新
 
-            keys = fieldnames(params);
-
-            if isempty(obj.m)
-                obj.m = struct();
-                obj.v = struct();
-                for idx = 1:length(keys)
-                    key = keys{idx};
-                    obj.m.(key) = zeros(size(params.(key)));
-                    obj.v.(key) = zeros(size(params.(key)));
+            if isempty(self.m)
+                self.m = containers.Map();
+                self.v = containers.Map();
+                for key = keys(params)
+                    self.m(key{1}) = zeros(size(params(key{1})));
+                    self.v(key{1}) = zeros(size(params(key{1})));
                 end
             end
 
-            obj.iter = obj.iter + 1;
-            lr_t = obj.lr .* sqrt(1 - obj.beta2.^obj.iter) ./ (1 - obj.beta1.^obj.iter);
+            self.iter = self.iter + 1;
+            lr_t = self.lr .* sqrt(1 - self.beta2.^self.iter) ./ (1 - self.beta1.^self.iter);
 
-            for idx = 1:length(keys)
-                key = keys{idx};
-                obj.m.(key) = obj.m.(key) + (1 - obj.beta1) .* (grads.(key) - obj.m.(key));
-                obj.v.(key) = obj.v.(key) + (1 - obj.beta2) .* (grads.(key).^2 - obj.v.(key));
-                params.(key) = params.(key) - lr_t .* obj.m.(key) ./ (sqrt(obj.v.(key)) + 1e-7);
+            for key = keys(params)
+                self.m(key{1}) = self.m(key{1}) + (1 - self.beta1) .* (grads(key{1}) - self.m(key{1}));
+                self.v(key{1}) = self.v(key{1}) + (1 - self.beta2) .* (grads(key{1}).^2 - self.v(key{1}));
+                params(key{1}) = params(key{1}) - lr_t .* self.m(key{1}) ./ (sqrt(self.v(key{1})) + 1e-7);
             end
         end
     end

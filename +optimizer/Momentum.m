@@ -8,7 +8,7 @@ classdef Momentum < handle
     end
 
     methods
-        function obj = Momentum(lr, momentum)
+        function self = Momentum(lr, momentum)
             % コンストラクタ
 
             if ~exist('lr', 'var')
@@ -18,28 +18,23 @@ classdef Momentum < handle
                 momentum = 0.9;
             end
 
-            obj.lr = lr;
-            obj.momentum = momentum;
-            obj.v = [];
+            self.lr = lr;
+            self.momentum = momentum;
         end
 
-        function params = update(obj, params, grads)
+        function update(self, params, grads)
             % パラメータの更新
 
-            keys = fieldnames(params);
-
-            if isempty(obj.v)
-                obj.v = struct();
-                for idx = 1:length(keys)
-                    key = keys{idx};
-                    obj.v.(key) = zeros(size(params.(key)));
+            if isempty(self.v)
+                self.v = containers.Map();
+                for key = keys(params)
+                    self.v(key{1}) = zeros(size(params(key{1})));
                 end
             end
 
-            for idx = 1:length(keys)
-                key = keys{idx};
-                obj.v.(key) = obj.momentum .* obj.v.(key) - obj.lr .* grads.(key);
-                params.(key) = params.(key) + obj.v.(key);
+            for key = keys(params)
+                self.v(key{1}) = self.momentum .* self.v(key{1}) - self.lr .* grads(key{1});
+                params(key{1}) = params(key{1}) + self.v(key{1});
             end
         end
     end

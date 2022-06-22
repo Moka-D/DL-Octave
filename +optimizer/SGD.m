@@ -15,10 +15,10 @@ classdef SGD < handle
             self.lr = lr;
         end
 
-        function params = update(self, params, grads)
+        function update(self, params, grads)
             % パラメータの更新
-            for key = fieldnames(params)'
-                params.(key{1}) = params.(key{1}) - self.lr .* grads.(key{1});
+            for key = keys(params)
+                params(key{1}) = params(key{1}) - self.lr .* grads(key{1});
             end
         end
     end

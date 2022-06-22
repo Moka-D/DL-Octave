@@ -21,7 +21,8 @@ classdef TwoLayerNet < handle
             b1 = zeros(hidden_size, 1);
             W2 = weight_init_std .* randn(output_size, hidden_size);
             b2 = zeros(output_size, 1);
-            self.params = struct('W1', W1, 'b1', b1, 'W2', W2, 'b2', b2);
+            self.params = containers.Map({'W1', 'b1', 'W2', 'b2'}, ...
+                                         {W1, b1, W2, b2});
 
             % レイヤの生成
             self.layers = struct('Affine1', layers.Affine(W1, b1), ...
@@ -33,10 +34,10 @@ classdef TwoLayerNet < handle
         function y = predict(self, x)
             % 推論
 
-            self.layers.Affine1.W = self.params.W1;
-            self.layers.Affine1.b = self.params.b1;
-            self.layers.Affine2.W = self.params.W2;
-            self.layers.Affine2.b = self.params.b2;
+            self.layers.Affine1.W = self.params('W1');
+            self.layers.Affine1.b = self.params('b1');
+            self.layers.Affine2.W = self.params('W2');
+            self.layers.Affine2.b = self.params('b2');
 
             for layer_name = fieldnames(self.layers)'
                 x = self.layers.(layer_name{1}).forward(x);
@@ -76,10 +77,11 @@ classdef TwoLayerNet < handle
             end
 
             % 勾配設定
-            grads = struct('W1', self.layers.Affine1.dW, ...
-                           'b1', self.layers.Affine1.db, ...
-                           'W2', self.layers.Affine2.dW, ...
-                           'b2', self.layers.Affine2.db);
+            grads = containers.Map({'W1', 'b1', 'W2', 'b2'}, ...
+                                   {self.layers.Affine1.dW, ...
+                                    self.layers.Affine1.db, ...
+                                    self.layers.Affine2.dW, ...
+                                    self.layers.Affine2.db});
         end
     end
 end

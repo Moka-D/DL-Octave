@@ -7,32 +7,27 @@ classdef AdaGrad < handle
     end
 
     methods
-        function obj = AdaGrad(lr)
+        function self = AdaGrad(lr)
             % コンストラクタ
             if ~exist('lr', 'var')
                 lr = 0.01;
             end
-            obj.lr = lr;
-            obj.h = [];
+            self.lr = lr;
         end
 
-        function params = update(obj, params, grads)
+        function update(self, params, grads)
             % パラメータの更新
 
-            keys = fieldnames(params);
-
-            if isempty(obj.h)
-                obj.h = struct();
-                for idx = 1:length(keys)
-                    key = keys{idx};
-                    obj.h.(key) = zeros(size(params.(key)));
+            if isempty(self.h)
+                self.h = containers.Map();
+                for key = keys(params)
+                    self.h(key{1}) = zeros(size(params(key{1})));
                 end
             end
 
-            for idx = 1:length(keys)
-                key = keys{idx};
-                obj.h.(key) = obj.h.(key) + grads.(key) .* grads.(key);
-                params.(key) = params.(key) - obj.lr .* grads.(key) ./ (sqrt(obj.h.(key)) + 1e-7);
+            for key = keys(params)
+                self.h(key{1}) = self.h(key{1}) + grads(key{1}) .* grads(key{1});
+                params(key{1}) = params(key{1}) - self.lr .* grads(key{1}) ./ (sqrt(self.h(key{1})) + 1e-7);
             end
         end
     end
