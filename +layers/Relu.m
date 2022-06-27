@@ -6,22 +6,17 @@ classdef Relu < handle
     end
 
     methods
-        function obj = Relu
-            % コンストラクタ
-            obj.mask = [];
-        end
-
-        function out = forward(obj, x)
+        function out = forward(self, x)
             % 順伝播
-            obj.mask = (x <= 0);
+            self.mask = (x <= 0);
             out = x;
-            out(obj.mask) = 0;
+            out(self.mask) = 0;
         end
 
-        function dx = backward(obj, dout)
+        function dx = backward(self, dout)
             % 逆伝播
             dx = dout;
-            dx(obj.mask) = 0;
+            dx(self.mask) = 0;
         end
     end
 end
